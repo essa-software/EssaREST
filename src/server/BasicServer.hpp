@@ -7,9 +7,9 @@
 
 class BasicServer {
     uint16_t m_port = 8000;
-    std::map<Util::UString, AbstractServerMethod> m_hooks;
+    std::map<std::string, AbstractServerMethod> m_hooks;
 protected:
-    void add_method( const Util::UString url,  AbstractServerMethod const& method);
+    void add_method( const std::string url,  AbstractServerMethod const& method);
 
 public:
     BasicServer() = default;
@@ -17,8 +17,7 @@ public:
     uint16_t get_port() const { return m_port; }
     void set_port(uint16_t _port) { m_port = _port; }
 
-    virtual void run();
-    void set_method( const Util::UString url,  AbstractServerMethod const& method);
+    virtual void run() = 0;
 
     virtual ~BasicServer() = default;
 };

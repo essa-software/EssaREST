@@ -8,6 +8,8 @@ add_executable(
     EssaREST
     main.cpp
     src/server/BasicServer.cpp
+    src/server/HttpServer.cpp
+    src/rest/HttpClientRequest.cpp
 )
 
 include(FetchContent)

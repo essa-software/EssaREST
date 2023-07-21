@@ -1,7 +1,9 @@
 #pragma once
 
-class AbstractServerMethod{    
+#include "AbstractClientRequest.hpp"
+class AbstractServerMethod{
 public:
     AbstractServerMethod() = default;
-    // virtual void exec() = 0;
+    virtual void exec(AbstractClientRequest*){}
+    virtual ~AbstractServerMethod() = default;
 };
