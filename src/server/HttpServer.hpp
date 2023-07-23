@@ -2,6 +2,7 @@
 #include <EssaUtil/UString.hpp>
 #include <cstdint>
 #include <map>
+#include <string>
 #include <vector>
 #include "BasicServer.hpp"
 
@@ -10,6 +11,7 @@ public:
     HttpServer() = default;
 
     virtual void run();
+    // void add_post_method(const std::string& uri, )
 
     virtual ~HttpServer() = default;
 };

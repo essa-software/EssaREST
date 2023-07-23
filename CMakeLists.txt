@@ -9,8 +9,13 @@ add_executable(
     main.cpp
     src/server/BasicServer.cpp
     src/server/HttpServer.cpp
+
     src/rest/HttpClientRequest.cpp
+    
 )
+
+# add_compile_options(-fsanitize=address)
+# add_link_options(-fsanitize=address)
 
 include(FetchContent)
 set(ESSA_UTIL_ONLY ON)

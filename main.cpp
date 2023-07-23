@@ -1,8 +1,10 @@
 #include "src/server/BasicServer.hpp"
 #include "src/server/HttpServer.hpp"
 #include "src/utils/HtmlBuilder.hpp"
+#include "src/utils/Json.hpp"
 #include <iostream>
 #include <string_view>
+#include <vector>
 
 int main(){
 
@@ -11,6 +13,17 @@ int main(){
     //     "Bajo Jajo"));
 
     // std::cout << html.size() << "\n";
+
+    JSON::Node json({
+        {"abc", 1},
+        {"def", true},
+        {"ghi", JSON::Array({1, 2, 3})},
+        {"jkl", JSON::Node({
+            {"mno", 2.5}
+        })}
+    });
+
+    std::cout << json.stringify() << "\n";
 
     HttpServer server;
     server.set_port(2137);
