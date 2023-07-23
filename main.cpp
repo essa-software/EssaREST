@@ -17,13 +17,22 @@ int main(){
     JSON::Node json({
         {"abc", 1},
         {"def", true},
-        {"ghi", JSON::Array({1, 2, 3})},
+        {"ghi", JSON::Array({
+            1, 
+            "cos", 
+            JSON::Node({
+                {"aaa", false}
+                })
+        })},
         {"jkl", JSON::Node({
             {"mno", 2.5}
         })}
     });
 
     std::cout << json.stringify() << "\n";
+    auto a = JSON::Marshall(json.stringify());
+
+    std::cout << a.stringify() << "\n";
 
     HttpServer server;
     server.set_port(2137);
