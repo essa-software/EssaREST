@@ -107,8 +107,6 @@ void HttpServer::run(){
             
             HttpGETClientRequest req;
             req.parse(request);
-            std::cout << req.Uri() << "\n";
-            std::cout << req["User-Agent"] << "\n";
             
             if( send(new_socket, message, strlen(message), 0) != (ssize_t)strlen(message) )  
             {  

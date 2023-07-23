@@ -10,14 +10,16 @@ class HttpClientRequest : public AbstractClientRequest{
 public:
     HttpClientRequest() = default;
     virtual HttpResponseCode parse(const char* req);
-    std::string operator[](std::string key) const;
+    const std::map<std::string, std::string>& Headers() const{return m_headers;}
     std::string Uri() const {return m_uri;}
     std::string Body() const {return m_body;}
 };
 
 class HttpGETClientRequest : public HttpClientRequest{
+    std::map<std::string, std::string> m_get;
 public:
     HttpGETClientRequest() = default;
     virtual HttpResponseCode parse(const char* req);
+    const std::map<std::string, std::string>& Get() const{return m_get;}
 
 };

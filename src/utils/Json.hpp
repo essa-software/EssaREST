@@ -17,7 +17,7 @@ class Value;
 class Array : public std::vector<Node> {
 public:
     Array() = default;
-    Array(std::initializer_list<Value> _list);
+    Array(const std::initializer_list<Value>& _list);
 };
 
 class Node {
@@ -55,7 +55,7 @@ public:
     static Node parse_node(std::string str);
 };
 
-inline Array::Array(std::initializer_list<Value> _list) {
+inline Array::Array(const std::initializer_list<Value>& _list) {
     for (const auto& n : _list) {
         push_back(n);
     }

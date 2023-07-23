@@ -22,7 +22,7 @@ int main(){
             "cos", 
             JSON::Node({
                 {"aaa", false}
-                })
+            })
         })},
         {"jkl", JSON::Node({
             {"mno", 2.5}

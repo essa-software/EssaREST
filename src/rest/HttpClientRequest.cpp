@@ -3,16 +3,6 @@
 #include <sstream>
 #include <string>
 
-std::string HttpClientRequest::operator[](std::string key) const{
-    auto it = m_headers.find(key);
-
-    if(it != m_headers.end()){
-        return it->second;
-    }else{
-        return "";
-    }
-}
-
 HttpResponseCode HttpClientRequest::parse(const char* req){
     std::stringstream ss;
     ss << req;
@@ -54,6 +44,26 @@ HttpResponseCode HttpGETClientRequest::parse(const char* req){
 
     if(method != "GET"){
         return HttpResponseCode::MethodNotAllowed;
+    }
+
+    std::string::size_type pos = path.find('?');
+
+    if(pos != std::string::npos){
+        std::string query = path.substr(pos + 1);
+        while(true){
+            std::string::size_type eq_pos = query.find('=');
+            std::string::size_type sep_pos = query.find('&');
+
+            if(eq_pos == std::string::npos) return HttpResponseCode::BadRequest;
+
+            if(sep_pos != std::string::npos){
+                m_get.insert({query.substr(0, eq_pos), query.substr(eq_pos+1, sep_pos-eq_pos-1)});
+                query = query.substr(sep_pos+1);
+            }else{
+                m_get.insert({query.substr(0, eq_pos), query.substr(eq_pos+1)});
+                break;
+            }
+        }
     }
 
     return HttpResponseCode::OK;
