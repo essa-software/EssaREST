@@ -2,6 +2,7 @@
 #include "AbstractClientRequest.hpp"
 #include "EssaUtil/UString.hpp"
 #include <map>
+#include <string>
 
 class HttpClientRequest : public AbstractClientRequest{
     std::map<std::string, std::string> m_headers;
@@ -10,7 +11,7 @@ class HttpClientRequest : public AbstractClientRequest{
 public:
     HttpClientRequest() = default;
     virtual HttpResponseCode parse(const char* req);
-    const std::map<std::string, std::string>& Headers() const{return m_headers;}
+    std::string Header(const std::string& key){return m_headers[key];}
     std::string Uri() const {return m_uri;}
     std::string Body() const {return m_body;}
 };

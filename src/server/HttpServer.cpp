@@ -1,4 +1,6 @@
 #include "HttpServer.hpp"
+#include <exception>
+#include <string>
 #include <unistd.h>
 #include <utility>
 #include <iostream>
@@ -7,6 +9,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "../rest/HttpClientRequest.hpp"
+#include "../rest/HttpServerMethod.hpp"
 
 void HttpServer::run(){
     int opt = 1;  
@@ -18,8 +21,6 @@ void HttpServer::run(){
     char buffer[1024];
          
     fd_set readfds;  
-         
-    const char *message = "ECHO Daemon v1.0 \r\n";  
      
     for (i = 0; i < max_clients; i++)  
     {  
@@ -103,14 +104,19 @@ void HttpServer::run(){
             std::string method, path, version;
             ss >> method >> path >> version;
 
-            std::cout << "Method:" << method << "\n";
-            
-            HttpGETClientRequest req;
-            req.parse(request);
-            
-            if( send(new_socket, message, strlen(message), 0) != (ssize_t)strlen(message) )  
-            {  
-                perror("send");  
+            if(method == "GET"){
+                HttpGETClientRequest req;
+                req.parse(request);
+                try{
+                    std::string message = execute_method<HttpGETServerMethod, HttpGETClientRequest>(path, &req);
+
+                    if( send(new_socket, message.data(), message.size(), 0) != (ssize_t)message.size() )  
+                    {  
+                        perror("send");  
+                    }
+                }catch(std::exception& ex){
+                    std::cout << ex.what() << "\n";
+                }
             }
                  
             for (i = 0; i < max_clients; i++)  
@@ -148,4 +154,9 @@ void HttpServer::run(){
             }  
         }  
     }  
+}
+
+void HttpServer::add_get_method(const std::string uri, std::function<HttpServerResponse(HttpServerResponse&)> foo){
+    HttpGETServerMethod* method = new HttpGETServerMethod(uri, std::move(foo));
+    add_method(uri, method);
 }

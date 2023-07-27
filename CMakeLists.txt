@@ -11,7 +11,8 @@ add_executable(
     src/server/HttpServer.cpp
 
     src/rest/HttpClientRequest.cpp
-    
+    src/rest/HttpServerMethod.cpp
+    src/rest/HttpServerResponse.cpp
 )
 
 # add_compile_options(-fsanitize=address)

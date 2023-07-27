@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -13,6 +14,18 @@
 namespace JSON {
 class Node;
 class Value;
+
+template <class T>
+class PrimitiveWrapper {
+private:
+  T val;
+public:
+  PrimitiveWrapper(T val = 0) : val(val) {}
+  operator T &() { return val; }
+  T* operator &() { return &val; }
+};
+
+using Number = PrimitiveWrapper<double>;
 
 class Array : public std::vector<Node> {
 public:
@@ -40,7 +53,7 @@ public:
 };
 
 class Value {
-    using Type = std::variant<int, bool, float, double, std::string, Node, Array>;
+    using Type = std::variant<Number, bool, std::string, Node, Array>;
     Type m_data;
     static Value parse_value(std::string str);
     static Array parse_array(std::string str);
@@ -63,21 +76,13 @@ inline Array::Array(const std::initializer_list<Value>& _list) {
 
 inline std::string Node::stringify_value(const Value& val) const {
     std::stringstream ss;
-    if (val.is_type_of<int>()) {
-        int v = val.get<int>();
+    if (val.is_type_of<Number>()) {
+        Number v = val.get<Number>();
         ss << v;
     }
     else if (val.is_type_of<bool>()) {
         bool v = val.get<bool>();
         ss << (v ? "true" : "false");
-    }
-    else if (val.is_type_of<float>()) {
-        float v = val.get<float>();
-        ss << v;
-    }
-    else if (val.is_type_of<double>()) {
-        double v = val.get<double>();
-        ss << v;
     }
     else if (val.is_type_of<std::string>()) {
         std::string v = val.get<std::string>();
@@ -222,7 +227,7 @@ inline Value Value::parse_value(std::string str){
         return result;
     }else{
         try{
-            Value result(std::stof(str));
+            Value result(std::stod(str));
             return result;
         }catch(...){
             throw std::runtime_error("Unrecognized JSON value!");
