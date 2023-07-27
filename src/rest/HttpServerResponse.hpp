@@ -2,7 +2,7 @@
 
 #include "AbstractServerResponse.hpp"
 #include "Defines.hpp"
-#include "../utils/Json.hpp"
+#include <EssaUtil/Json.hpp>
 #include <cstring>
 #include <map>
 #include <string>
