@@ -8,20 +8,20 @@
 
 class HttpServerMethod : public AbstractServerMethod {
     const std::string m_method;
-    std::function<HttpServerResponse(HttpServerResponse&)> m_foo;
 
 public:
-    HttpServerMethod(const std::string& _uri, const std::string& _method, std::function<HttpServerResponse(HttpServerResponse&)> foo)
+    HttpServerMethod(const std::string& _uri, const std::string& _method)
         : AbstractServerMethod(_uri)
-        , m_method(_method)
-        , m_foo(std::move(foo)) { }
+        , m_method(_method){ }
 
     std::string Method() const { return m_method; }
-    std::string exec(HttpGETClientRequest& req) const;
 };
 
 class HttpGETServerMethod : public HttpServerMethod {
+    std::function<HttpServerResponse(const HttpGETClientRequest&)> m_foo;
 public:
-    HttpGETServerMethod(const std::string& _uri, std::function<HttpServerResponse(HttpServerResponse&)> foo)
-        : HttpServerMethod(_uri, "GET", std::move(foo)) { }
+    HttpGETServerMethod(const std::string& _uri, std::function<HttpServerResponse(const HttpGETClientRequest&)> foo)
+        : HttpServerMethod(_uri, "GET"),  m_foo(std::move(foo)) { }
+    
+    std::string exec(const HttpGETClientRequest& req) const;
 };

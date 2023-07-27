@@ -16,19 +16,21 @@ std::string HttpServerResponse::raw_data() const{
     return ss.str();
 }
 
-HttpServerResponse& HttpServerResponse::json(HttpResponseCode _code, const JSON::Node& _data){
-    m_code = _code;
+HttpServerResponse HttpServerResponse::json(HttpResponseCode _code, const JSON::Node& _data){
+    HttpServerResponse res;
+    res.set_response_code(_code);
     std::string stringified = _data.stringify();
-    set_data(stringified);
-    add_header("Content-Type", "application/json");
+    res.set_data(stringified);
+    res.add_header("Content-Type", "application/json");
 
-    return *this;
+    return res;
 }
 
-HttpServerResponse& HttpServerResponse::text(HttpResponseCode _code, const std::string& _data){
-    m_code = _code;
-    set_data(_data);
-    add_header("Content-Type", "text/plain");
+HttpServerResponse HttpServerResponse::text(HttpResponseCode _code, const std::string& _data){
+    HttpServerResponse res;
+    res.set_response_code(_code);
+    res.set_data(_data);
+    res.add_header("Content-Type", "text/plain");
 
-    return *this;
+    return res;
 }

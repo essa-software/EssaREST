@@ -107,6 +107,7 @@ void HttpServer::run(){
             if(method == "GET"){
                 HttpGETClientRequest req;
                 req.parse(request);
+                path = path.substr(0, path.find("?"));
                 try{
                     std::string message = execute_method<HttpGETServerMethod, HttpGETClientRequest>(path, &req);
 
@@ -156,7 +157,7 @@ void HttpServer::run(){
     }  
 }
 
-void HttpServer::add_get_method(const std::string uri, std::function<HttpServerResponse(HttpServerResponse&)> foo){
+void HttpServer::add_get_method(const std::string uri, std::function<HttpServerResponse(const HttpGETClientRequest&)> foo){
     HttpGETServerMethod* method = new HttpGETServerMethod(uri, std::move(foo));
     add_method(uri, method);
 }

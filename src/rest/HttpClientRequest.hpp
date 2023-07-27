@@ -11,7 +11,7 @@ class HttpClientRequest : public AbstractClientRequest{
 public:
     HttpClientRequest() = default;
     virtual HttpResponseCode parse(const char* req);
-    std::string Header(const std::string& key){return m_headers[key];}
+    std::string Header(const std::string& key)const{return m_headers.find(key)->second;}
     std::string Uri() const {return m_uri;}
     std::string Body() const {return m_body;}
 };
